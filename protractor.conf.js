@@ -8,6 +8,18 @@ exports.config = {
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],
+  multiCapabilities: [
+    // phantom is chrashing
+    /*
+    {
+      'browserName': 'phantomjs',
+      'phantomjs.binary.path': '../../node_modules/phantomjs/bin/phantomjs',
+      'phantomjs.ghostdriver.cli.args': ['--debug=true', '--webdriver-logfile=webdriver.log', '--webdriver-loglevel=DEBUG']
+    },*/
+    {
+      'browserName': 'chrome'
+    }
+  ],
   capabilities: {
     'browserName': 'chrome'
   },
@@ -19,6 +31,29 @@ exports.config = {
     defaultTimeoutInterval: 30000,
     print: function() {}
   },
+
+  params: {
+    screenshotsBasePath: 'screenshots',
+    screenshotSizes: [
+      {
+        browserName: 'phantomjs',
+        sizes: [
+          { width: 1024, height: 768 }, // default, iPad portait
+          { width: 320, height: 480 }, // iPhone portrait
+          { width: 768, height: 1024 } // iPad landscape
+        ]
+      },
+      {
+        browserName: 'chrome',
+        sizes: [
+          { width: 1024, height: 768 }, // default
+          { width: 320, height: 480 }, // iPhone portrait
+          { width: 768, height: 1024 } // iPad landscape
+        ]
+      }
+    ]
+  },
+
   onPrepare() {
     require('ts-node').register({
       project: 'e2e/tsconfig.e2e.json'
