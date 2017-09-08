@@ -1,32 +1,65 @@
 // Done based on protractor-screenshots, but with some improvements (mocha support, multiplathofrm support)
+// How to use:
+//
+// describe('screenshot-test App', function () {
+//   let page: ScreenshotTestPage;
+//   const self = this;
+//
+//   beforeEach(() => {
+//     page = new ScreenshotTestPage();
+//   });
+//
+//   it('should display welcome message', () => {
+//     page.navigateTo();
+//     expect(page.getParagraphText()).toEqual('Welcome to app!');
+//     screenshot.checkScreenshot(self, 'test');
+//   });
+// });
+//
+// in describe please use function instead of arrow function to be able to have access to the test suite object.
+
 var $q = require('q'),
 	slug = require('slug'),
 	rimraf = require('rimraf'),
-	resemble = require('resemble').resemble,
+	resemble = require('node-resemble'),
 	fs = require('fs'),
 	path = require('path'),
 	mkdirp = require('mkdirp'),
-	debug = require('debug')('screenshot'),
+  debug = require('debug')('screenshot'),
+  util = require('util'),
 	disableScreenshots = browser.params['disableScreenshots'],
-  	screenshotBase = browser.params['screenshotsBasePath'] || '.',
+    screenshotBase = browser.params['screenshotsBasePath'] || 'screenshots',
+    browserFolderName = browser.params['browserFolderName'] || '{browserName}',
   	screenshotSizes = browser.params['screenshotSizes'],
   	capabilityString = '',
   	capabilityStringWithoutVersion = '',
-  	capabilities = {};
+    capabilities = {};
 
-browser.getCapabilities().then(function(returnValue) {
+debug('screenshotSizes: ', util.inspect(screenshotSizes, {colors: true, depth: 10}))
+
+browser.getCapabilities().then(function(thisCapabilities) {
     var browserName, platform, version;
-    capabilities = returnValue.caps_;
-    //debug(capabilities);
-    browserName = returnValue.caps_.browserName.toLowerCase();
-    platform = returnValue.caps_.platform.toLowerCase();
-    version = returnValue.caps_.version.toLowerCase();
-    capabilityStringWithoutVersion = "" + platform + "-" + browserName;
+    capabilities = thisCapabilities
+    debug(capabilities);
+    // https://github.com/angular/protractor/issues/3036
+    browserName = capabilities.get('browserName').toLowerCase();
+    platform = capabilities.get('platform').toLowerCase();
+    version = capabilities.get('version').toLowerCase();
+    capabilities.browserName = browserName;
+    capabilities.platform = platform;
+    capabilities.version = version;
+    capabilityStringWithoutVersion = browserFolderName;
+    variableNames = Object.keys(capabilities);
+    for (var i = 0; i < variableNames.length; ++i) {
+      variableName = variableNames[i];
+      capabilityStringWithoutVersion.replace( '{' + variableName + '}', capabilities[variableName])
+    }
     return capabilityString = capabilityStringWithoutVersion + "-" + version;
+    //return capabilitiesString = browserName;
 });
 
 exports.checkScreenshot = function(spec, screenshotName, delay, beforeEach, acceptedDiff) {
-	debug('take screenshot %o', screenshotName);
+	debug('take screenshot %o', screenshotName, ', spec: ', util.inspect(spec, {colors: true, depth: 10}));
     if (disableScreenshots) {
       	return;
     }
@@ -102,7 +135,7 @@ function fileExistsPromise(filePath){
 }
 
 function matchScreenshot(spec, screenshotName, screenshot, acceptedDiff) {
-	debug('matchScreenshot');
+	debug('matchScreenshot ', spec);
 	var label = "" + screenshotName + " - " + screenshot.width + "x" + screenshot.height,
 		suite = spec.suite || spec,
 		isJasmine = spec.suite != undefined,
@@ -137,6 +170,7 @@ function matchScreenshot(spec, screenshotName, screenshot, acceptedDiff) {
 			}
 			var dfd = $q.defer();
 			resemble(new Buffer(screenshot.data, 'base64')).compareTo(data).onComplete(function(result) {
+          //console.log(result);
 			    if (result.misMatchPercentage === '0.00'
 			    		|| (acceptedDiff && Number(result.misMatchPercentage) <= acceptedDiff)) {
 				    return dfd.resolve({
@@ -212,7 +246,7 @@ function writeImage(data, filePath) {
 };
 
 function getPath(suite, useVersion) {
-	debug('getPath');
+	debug('getPath ', suite, useVersion);
 	function buildName(suite) {
 		var prefix;
 		prefix = '';

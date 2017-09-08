@@ -10,12 +10,11 @@ exports.config = {
   ],
   multiCapabilities: [
     // phantom is chrashing
-    /*
     {
       'browserName': 'phantomjs',
-      'phantomjs.binary.path': '../../node_modules/phantomjs/bin/phantomjs',
-      'phantomjs.ghostdriver.cli.args': ['--debug=true', '--webdriver-logfile=webdriver.log', '--webdriver-loglevel=DEBUG']
-    },*/
+      //'phantomjs.binary.path': '../../node_modules/phantomjs/bin/phantomjs',
+      //'phantomjs.ghostdriver.cli.args': ['--debug=true', '--webdriver-logfile=webdriver.log', '--webdriver-loglevel=DEBUG']
+    },
     {
       'browserName': 'chrome'
     }
@@ -34,6 +33,7 @@ exports.config = {
 
   params: {
     screenshotsBasePath: 'screenshots',
+    browserFolderName: '{browserName}', // can be used the following variables: browserName, platform, version
     screenshotSizes: [
       {
         browserName: 'phantomjs',
