@@ -20,7 +20,6 @@
         "angular"
     ],
     "author": "ionlupascu@gmail.com",
-    "license": "MIT",
     "bugs": {
         "url": "https://github.com/tojocky/angular-e2e-screenshot/issues"
     },
@@ -35,7 +34,6 @@
     "devDependencies": {
         "@types/jasmine": "^2.5.54",
         "@types/jasminewd2": "~2.0.2",
-        "@types/node": "^8.0.24",
         "@types/node": "~6.0.60",
         "es6-promise": "^4.1.1",
         "jasmine-core": "~2.6.2",
@@ -46,11 +44,9 @@
         "karma-coverage": "^1.1.1",
         "karma-jasmine": "^1.1.0",
         "karma-junit-reporter": "^1.2.0",
-        "karma-phantomjs-launcher": "^1.0.4",
         "karma-typescript": "^3.0.5",
         "karma-typescript-es6-transform": "^1.0.2",
         "nodemon": "^1.11.0",
-        "phantomjs": "^2.1.7",
         "promise-polyfill": "^6.0.2",
         "ts-node": "^3.3.0",
         "typescript": "^2.4.2"

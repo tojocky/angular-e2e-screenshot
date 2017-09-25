@@ -36,8 +36,9 @@ in `*.e2e-spec.ts` use it:
 import { ExamplePage } from './app.po';
 const screenshot = require('ngular-e2e-screenshot');
 
-describe('example App', () => {
+describe('example App', function() {
   let page: ExamplePage;
+  let self = this;
 
   beforeEach(() => {
     page = new ExamplePage();
@@ -50,3 +51,5 @@ describe('example App', () => {
   });
 });
 ```
+
+Please pay atention that in the `description` function is passed a closure (`function(){...}`) rather than an arrow function (`() => {...}`). This is done to pass test object to screenshot.

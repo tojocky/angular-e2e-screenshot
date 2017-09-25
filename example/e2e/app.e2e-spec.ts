@@ -1,8 +1,9 @@
 import { ExamplePage } from './app.po';
 const screenshot = require('../../src/index.js');
 
-describe('example App', () => {
+describe('example App', function () {
   let page: ExamplePage;
+  let self = this;
 
   beforeEach(() => {
     page = new ExamplePage();
