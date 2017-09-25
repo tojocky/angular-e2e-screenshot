@@ -1,12 +1,25 @@
-# ScreenshotTest
+// Protractor configuration file, see link for more information
+// https://github.com/angular/protractor/blob/master/lib/config.ts
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.7.
+const { SpecReporter } = require('jasmine-spec-reporter');
 
-## How to use
+exports.config = {
+    allScriptsTimeout: 11000,
+    specs: [
+        './e2e/**/*.e2e-spec.ts'
+    ],
+    capabilities: {
+        'browserName': 'chrome'
+    },
+    directConnect: true,
+    baseUrl: 'http://localhost:4200/',
+    framework: 'jasmine',
+    jasmineNodeOpts: {
+        showColors: true,
+        defaultTimeoutInterval: 30000,
+        print: function() {}
+    },
 
-Add in `protractor.conf.js` config json the following setting:
-
-```javascript
     params: {
         screenshotsBasePath: 'screenshots',
         browserFolderName: '{browserName}', // can be used the following variables: browserName, platform, version
@@ -28,25 +41,11 @@ Add in `protractor.conf.js` config json the following setting:
             }
         ]
     },
-```
 
-in `*.e2e-spec.ts` use it:
-
-```typescript
-import { ExamplePage } from './app.po';
-const screenshot = require('ngular-e2e-screenshot');
-
-describe('example App', () => {
-  let page: ExamplePage;
-
-  beforeEach(() => {
-    page = new ExamplePage();
-  });
-
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
-    screenshot.checkScreenshot(self, 'test');
-  });
-});
-```
+    onPrepare() {
+        require('ts-node').register({
+            project: 'e2e/tsconfig.e2e.json'
+        });
+        jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    }
+};
