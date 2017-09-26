@@ -25,6 +25,7 @@
     },
     "homepage": "https://github.com/tojocky/angular-e2e-screenshot#readme",
     "dependencies": {
+        "debug": "^3.0.1",
         "node-resemble": "^2.0.1",
         "q": "^1.5.0",
         "rimraf": "^2.6.1",

@@ -9,9 +9,9 @@ describe('example App', function () {
     page = new ExamplePage();
   });
 
-  it('should display welcome message', () => {
+  it('should display welcome message', (done) => {
     page.navigateTo();
     expect(page.getParagraphText()).toEqual('Welcome to app!');
-    screenshot.checkScreenshot(self, 'test');
+    screenshot.checkScreenshot(self, 'test').then(done, done);
   });
 });

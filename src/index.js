@@ -77,11 +77,12 @@ function takeScreenshot(spec, screenshotName, delay, beforeEach, acceptedDiff) {
     if (screenSizes.length > 0) {
         debug('spread sizes');
         var dfd = protractor.promise.defer();
+        var currPromise = dfd.promise;
         for (var i = 0; i < screenSizes.length; ++i) {
-            addSetScreenSizeAndTakeScreenshot(dfd.promise, screenSizes[i], spec, screenshotName, delay, beforeEach, acceptedDiff)
+            currPromise = addSetScreenSizeAndTakeScreenshot(currPromise, screenSizes[i], spec, screenshotName, delay, beforeEach, acceptedDiff)
         }
         dfd.fulfill();
-        return dfd.promise;
+        return currPromise;
     } else {
         debug('no sizes');
         return actualTakeScreenshot(spec, screenshotName, beforeEach, acceptedDiff);
